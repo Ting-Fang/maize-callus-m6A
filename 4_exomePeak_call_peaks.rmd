@@ -1,0 +1,74 @@
+---
+title: "4_exomePeak_call_peaks"
+author: "fangting"
+date: "2019/9/30"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# exomePeak calls peaks
+
+```{r,eval=FALSE}
+library(exomePeak)
+## sample D2
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/D2/")
+
+IP_BAM=c("D2_1_IP_pos_sorted.bam","D2_2_IP_pos_sorted.bam")
+INPUT_BAM=c("D2_1_input_pos_sorted.bam","D2_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="D2_peak")
+
+## sample D4
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/D4/")
+
+IP_BAM=c("D4_1_IP_pos_sorted.bam","D4_2_IP_pos_sorted.bam")
+INPUT_BAM=c("D4_1_input_pos_sorted.bam","D4_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="D4_peak")
+
+## sample D8
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/D8/")
+
+IP_BAM=c("D8_1_IP_pos_sorted.bam","D8_2_IP_pos_sorted.bam")
+INPUT_BAM=c("D8_1_input_pos_sorted.bam","D8_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="D8_peak")
+
+## sample N2
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/N2/")
+
+IP_BAM=c("N2_1_IP_pos_sorted.bam","N2_2_IP_pos_sorted.bam")
+INPUT_BAM=c("N2_1_input_pos_sorted.bam","N2_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="N2_peak")
+
+## sample N4
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/N4/")
+
+IP_BAM=c("N4_1_IP_pos_sorted.bam","N4_2_IP_pos_sorted.bam")
+INPUT_BAM=c("N4_1_input_pos_sorted.bam","N4_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="N4_peak")
+
+## sample N8
+setwd("D:/20180528-personal/callus/Analysis/20181213-08/allsample_bam/N8/")
+
+IP_BAM=c("N8_1_IP_pos_sorted.bam","N8_2_IP_pos_sorted.bam")
+INPUT_BAM=c("N8_1_input_pos_sorted.bam","N8_2_input_pos_sorted.bam")
+result=exomepeak(GENE_ANNO_GTF = "D:/maize genome file/maize_v4/Zea_mays.B73_RefGen_v4.41.gtf",
+                 IP_BAM=IP_BAM,
+                 INPUT_BAM=INPUT_BAM,
+                 EXPERIMENT_NAME="N8_peak")
+```
+
