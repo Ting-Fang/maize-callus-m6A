@@ -1,0 +1,62 @@
+---
+title: "3_differential_expression"
+author: "fangting"
+date: "2019/9/30"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# DEseq2 for FPKM and differential expression 
+
+```{r,eval=FALSE}
+library(DESeq2)
+setwd(path/to/input_reads_count)
+
+count <- NA
+for (i in c("D2_1","D2_2","D4_1","D4_2","D8_1","D8_2","N2_1","N2_2","N4_1","N4_2","N8_1","N8_2")) {
+  ls <- read.table(paste(i,"_input.htseq.count.pos.sorted.txt",sep = ""),header = F,stringsAsFactors = F,row.names = 1)
+  count <- cbind(count,ls)
+}
+counts <- count[,-1]
+names(counts) <- c("D2_1","D2_2","D4_1","D4_2","D8_1","D8_2","N2_1","N2_2","N4_1","N4_2","N8_1","N8_2") 
+countdata <- as.matrix(counts[-c(46431:46435),])
+
+coldata <- read.table("sample.txt",sep="\t",header=TRUE,row.names=1)
+
+dds <- DESeqDataSetFromMatrix(countData=countdata,
+                              colData=coldata,
+                             design = ~ condition)
+## calculate FPKM
+dds <- estimateSizeFactors(dds) 
+my.counts.normalized <- counts(dds,normalized=TRUE)
+write.table(my.counts.normalized,file = "normalized.reads.txt",sep = "\t",quote = F)
+
+## Construct GRangesList from gtf file
+library(rtracklayer)
+gff <- import("path/to/ref/Zea_mays.B73_RefGen_v4.41.gtf","gtf")
+gff.flag <- mcols(gff)$type == "exon"
+gff.exon <- gff[gff.flag]
+genes_list <- split(gff.exon, mcols(gff.exon)$gene_id)
+
+## genes_list (GRangesList object) and dds (DESeqDataSet) has already been ordered by name internally. Both have the same genes and same order.
+if (length(rownames(dds)) == sum(rownames(dds) == names(genes_list)))
+  {print("genes_list and dds have the same gene order")}
+rowRanges(dds) <- genes_list
+my.fpkm.from_normalized_counts <- fpkm(dds,robust = TRUE)
+write.table(my.fpkm.from_normalized_counts,file = "FPKM.from.normalized.reads.txt",sep = "\t",quote = F)
+
+## calculate differential expression
+dds <- DESeq(dds)
+resultsNames(dds)
+
+resD2vsN2 <- results(dds, contrast = c("condition", "D2","N2"), alpha=0.05)
+write.csv(resD2vsN2,file="D2vsN2.csv",sep=",",quote = F)
+
+resD4vsD2 <- results(dds, contrast = c("condition", "D4","D2"), alpha=0.05)
+write.csv(resD4vsD2,file="D4vsD2.csv",sep=",",quote = F)
+
+resD8vsD4 <- results(dds, contrast = c("condition", "D8","D4"), alpha=0.05)
+write.csv(resD8vsD4,file="D8vsD4.csv",sep=",",quote = F)
+```
+

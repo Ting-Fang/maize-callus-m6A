@@ -1,0 +1,69 @@
+---
+title: "README"
+author: "fangting"
+date: "2019/10/9"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# m6A-seq analysis
+
+## three different time points (day2,day4 and day8) of two experimental treatments (D and N), pipeline takes D2 sample as an example
+
+    D2_1_input_CleanData_R1.fastq.gz  D2_1_input
+    D2_1_input_CleanData_R2.fastq.gz  D2_1_input
+    D2_1_IP_CleanData_R1.fastq.gz D2_1_IP
+    D2_1_IP_CleanData_R2.fastq.gz D2_1_IP
+    D2_2_input_CleanData_R1.fastq.gz  D2_2_input
+    D2_2_input_CleanData_R2.fastq.gz  D2_2_input
+    D2_2_IP_CleanData_R1.fastq.gz D2_2_IP
+    D2_2_IP_CleanData_R2.fastq.gz D2_2_IP
+    D4_1_input_CleanData_R1.fastq.gz  D4_1_input
+    D4_1_input_CleanData_R2.fastq.gz  D4_1_input
+    D4_1_IP_CleanData_R1.fastq.gz D4_1_IP
+    D4_1_IP_CleanData_R2.fastq.gz D4_1_IP
+    D4_2_input_CleanData_R1.fastq.gz  D4_2_input
+    D4_2_input_CleanData_R2.fastq.gz  D4_2_input
+    D4_2_IP_CleanData_R1.fastq.gz  D4_2_IP
+    D4_2_IP_CleanData_R2.fastq.gz  D4_2_IP
+    D8_1_input_CleanData_R1.fastq.gz  D8_1_input
+    D8_1_input_CleanData_R2.fastq.gz  D8_1_input
+    D8_1_IP_CleanData_R1.fastq.gz D8_1_IP
+    D8_1_IP_CleanData_R2.fastq.gz D8_1_IP
+    D8_2_input_CleanData_R1.fastq.gz  D8_2_input
+    D8_2_input_CleanData_R2.fastq.gz  D8_2_input
+    D8_2_IP_CleanData_R1.fastq.gz D8_2_IP
+    D8_2_IP_CleanData_R2.fastq.gz D8_2_IP
+    N2_1_input_CleanData_R1.fastq.gz  N2_1_input
+    N2_1_input_CleanData_R2.fastq.gz  N2_1_input
+    N2_1_IP_CleanData_R1.fastq.gz  N2_1_IP
+    N2_1_IP_CleanData_R2.fastq.gz  N2_1_IP
+    N2_2_input_CleanData_R1.fastq.gz  N2_2_input
+    N2_2_input_CleanData_R2.fastq.gz  N2_2_input
+    N2_2_IP_CleanData_R1.fastq.gz N2_2_IP
+    N2_2_IP_CleanData_R2.fastq.gz N2_2_IP
+    N4_1_input_CleanData_R1.fastq.gz  N4_1_input
+    N4_1_input_CleanData_R2.fastq.gz  N4_1_input
+    N4_1_IP_CleanData_R1.fastq.gz N4_1_IP
+    N4_1_IP_CleanData_R2.fastq.gz N4_1_IP
+    N4_2_input_CleanData_R1.fastq.gz  N4_2_input
+    N4_2_input_CleanData_R2.fastq.gz  N4_2_input
+    N4_2_IP_CleanData_R1.fastq.gz N4_2_IP
+    N4_2_IP_CleanData_R2.fastq.gz N4_2_IP
+    N8_1_input_CleanData_R1.fastq.gz  N8_1_input
+    N8_1_input_CleanData_R2.fastq.gz  N8_1_input
+    N8_1_IP_CleanData_R1.fastq.gz N8_1_IP
+    N8_1_IP_CleanData_R2.fastq.gz N8_1_IP
+    N8_2_input_CleanData_R1.fastq.gz   N8_2_input
+    N8_2_input_CleanData_R2.fastq.gz   N8_2_input
+    N8_2_IP_CleanData_R1.fastq.gz N8_2_IP
+    N8_2_IP_CleanData_R2.fastq.gz N8_2_IP
+    
+## Analysis process is based on clean data, mainly consists of four parts
+    
+    1. reads mapping to genome
+    2. htseq-count for reads counting
+    3. differential expression analysis
+    4. exomePeak for peak calling
+    
