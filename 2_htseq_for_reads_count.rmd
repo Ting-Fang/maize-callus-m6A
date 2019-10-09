@@ -9,53 +9,27 @@ editor_options:
 
 # htseq-count for reads count of input samples
 
-## samtools sorts bam by position
+## samtools sorts bam by position,
+## the parameter of -T used to specify temporary file, note that the temporary files for each sample cannot be in the same directory
 
 ```{r,eval=FALSE}
-ls.sample <- read.table("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2/sample.txt",sep = "",header = F,stringsAsFactors = F)
-j <- length(ls.sample[,2])/2
-for (i in 1:j) {
-  a <- "#$ -S /bin/bash"
-  b <- "#$ -j y"
-  c <- "#$ -V"
-  d <- "#$ -cwd"
-  e <- "#$ -l h_vmem=100G"
-  f <- "#$ -q all.q"
-  l <- paste("samtools sort -T"," ",ls.sample[i*2,2],"/tmp.bam"," ",ls.sample[i*2,2],"/",ls.sample[i*2,2],".filter.bam -o"," ",ls.sample[i*2,2],"/",ls.sample[i*2,2],"_pos_sorted.bam",sep = "")
-ls <- c(a,b,c,d,e,f,l)
-write.table(ls,file=paste("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2_RF/samtools_filter/run",i,".sort.csh",sep=""),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
-}
-
-## submit code
-for i in *.sort.csh
-  do
-   qsub $i
-done
+#$ -S /bin/bash
+#$ -j y
+#$ -V
+#$ -cwd
+#$ -l h_vmem=100G
+samtools sort -T tmp.bam path/to/filtered_bam/D2_1_input.filtered.bam -o path/to/pos_sorted_bam/D2_1_input_pos_sorted.bam
 ```
 
 ## htseq-count calculates reads of bam file
+## the -s parameter is setted as reverse for the chain-specific coding genes
 
 ```{r,eval=FALSE}
-mkdir htseq-count
-
-ls.sample <- read.table("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/20181206_lncRNA/sample.txt",sep = "",header = F,stringsAsFactors = F)
-j <- length(ls.sample[,2])/2
-for (i in 1:j) {
-  a <- "#$ -S /bin/bash"
-  b <- "#$ -j y"
-  c <- "#$ -V"
-  d <- "#$ -cwd"
-  e <- "#$ -l h_vmem=100G"
-  f <- "#$ -q all.q"
-  m <- paste("/wanglab/fustu/.local/bin/htseq-count -f bam -r pos -s reverse -a 10 -m union --nonunique none ../samtools_filter/",ls.sample[i*2,2],"/",ls.sample[i*2,2],"_pos_sorted.bam /datalus/fujj/fangting/20180828_callus/20181119_m6A/RefGenome/Zea_mays.B73_RefGen_v4.41.gtf > ./",ls.sample[i*2,2],".htseq.count.pos.sorted.txt",sep="")
-  ls <- c(a,b,c,d,e,f,m)
-  write.table(ls,file=paste("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2_RF/htseq-count/run",i,".htseq.count.csh",sep=""),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
-}
-
-## submit code
-for i in *.htseq.count.csh
-  do
-   qsub $i
-done
+#$ -S /bin/bash
+#$ -j y
+#$ -V
+#$ -cwd
+#$ -l h_vmem=100G
+htseq-count -f bam -r pos -s reverse -a 10 -m union --nonunique none path/to/pos_sorted_bam/D2_1_input_pos_sorted.bam path/to/ref/Zea_mays.B73_RefGen_v4.41.gtf > path/to/reads/D2_1_input.htseq.count.pos.sorted.txt
 ```
 

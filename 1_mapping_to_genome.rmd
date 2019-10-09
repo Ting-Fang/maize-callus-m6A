@@ -8,67 +8,11 @@ editor_options:
 ---
 
 # mapping to genome
-
-## sample information in the file of sample.txt
-## three different time points (day2,day4 and day8) of two experimental treatments (D and N)
-
-    D2_1_input_CleanData_R1.fastq.gz  D2_1_input
-    D2_1_input_CleanData_R2.fastq.gz  D2_1_input
-    D2_1_IP_CleanData_R1.fastq.gz D2_1_IP
-    D2_1_IP_CleanData_R2.fastq.gz D2_1_IP
-    D2_2_input_CleanData_R1.fastq.gz  D2_2_input
-    D2_2_input_CleanData_R2.fastq.gz  D2_2_input
-    D2_2_IP_CleanData_R1.fastq.gz D2_2_IP
-    D2_2_IP_CleanData_R2.fastq.gz D2_2_IP
-    D4_1_input_CleanData_R1.fastq.gz  D4_1_input
-    D4_1_input_CleanData_R2.fastq.gz  D4_1_input
-    D4_1_IP_CleanData_R1.fastq.gz D4_1_IP
-    D4_1_IP_CleanData_R2.fastq.gz D4_1_IP
-    D4_2_input_CleanData_R1.fastq.gz  D4_2_input
-    D4_2_input_CleanData_R2.fastq.gz  D4_2_input
-    D4_2_IP_CleanData_R1.fastq.gz  D4_2_IP
-    D4_2_IP_CleanData_R2.fastq.gz  D4_2_IP
-    D8_1_input_CleanData_R1.fastq.gz  D8_1_input
-    D8_1_input_CleanData_R2.fastq.gz  D8_1_input
-    D8_1_IP_CleanData_R1.fastq.gz D8_1_IP
-    D8_1_IP_CleanData_R2.fastq.gz D8_1_IP
-    D8_2_input_CleanData_R1.fastq.gz  D8_2_input
-    D8_2_input_CleanData_R2.fastq.gz  D8_2_input
-    D8_2_IP_CleanData_R1.fastq.gz D8_2_IP
-    D8_2_IP_CleanData_R2.fastq.gz D8_2_IP
-    N2_1_input_CleanData_R1.fastq.gz  N2_1_input
-    N2_1_input_CleanData_R2.fastq.gz  N2_1_input
-    N2_1_IP_CleanData_R1.fastq.gz  N2_1_IP
-    N2_1_IP_CleanData_R2.fastq.gz  N2_1_IP
-    N2_2_input_CleanData_R1.fastq.gz  N2_2_input
-    N2_2_input_CleanData_R2.fastq.gz  N2_2_input
-    N2_2_IP_CleanData_R1.fastq.gz N2_2_IP
-    N2_2_IP_CleanData_R2.fastq.gz N2_2_IP
-    N4_1_input_CleanData_R1.fastq.gz  N4_1_input
-    N4_1_input_CleanData_R2.fastq.gz  N4_1_input
-    N4_1_IP_CleanData_R1.fastq.gz N4_1_IP
-    N4_1_IP_CleanData_R2.fastq.gz N4_1_IP
-    N4_2_input_CleanData_R1.fastq.gz  N4_2_input
-    N4_2_input_CleanData_R2.fastq.gz  N4_2_input
-    N4_2_IP_CleanData_R1.fastq.gz N4_2_IP
-    N4_2_IP_CleanData_R2.fastq.gz N4_2_IP
-    N8_1_input_CleanData_R1.fastq.gz  N8_1_input
-    N8_1_input_CleanData_R2.fastq.gz  N8_1_input
-    N8_1_IP_CleanData_R1.fastq.gz N8_1_IP
-    N8_1_IP_CleanData_R2.fastq.gz N8_1_IP
-    N8_2_input_CleanData_R1.fastq.gz   N8_2_input
-    N8_2_input_CleanData_R2.fastq.gz   N8_2_input
-    N8_2_IP_CleanData_R1.fastq.gz N8_2_IP
-    N8_2_IP_CleanData_R2.fastq.gz N8_2_IP
     
 ## hisat2 mapping reads to refgenome
 
 ```{r,eval=FALSE}
-## download gff3 of maize
-ftp://ftp.ensemblgenomes.org/pub/plants/release-41/gff3/zea_mays/Zea_mays.B73_RefGen_v4.41.gff3.gz
-
-## convert gff3 file into gtf file
-gunzip Zea_mays.B73_RefGen_v4.41.gff3.gz
+## download gff3 of maize and convert gff3 file into gtf file
 gffread Zea_mays.B73_RefGen_v4.41.gff3 -T -o Zea_mays.B73_RefGen_v4.41.gtf
 
 ## extract_exons.py of hisat2 extracts exons
@@ -80,55 +24,22 @@ extract_splice_sites.py Zea_mays.B73_RefGen_v4.41.gtf > Zea_mays.B73_RefGen_v4.4
 ## hisat2-build for index
 hisat2-build -p 8 Zea_mays.AGPv4.dna.toplevel.fa --exon Zea_mays.B73_RefGen_v4.41.exons --ss Zea_mays.B73_RefGen_v4.41.splicesites Zea_mays.B73_RefGen_v4.41_tran
 
-## directory of index
-path: /datalus/fujj/fangting/20180828_callus/20181119_m6A/RefGenome/Zea_mays.B73_RefGen_v4.41_tran
-
-ls.sample <- read.table("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2/sample.txt",sep = "",header = F,stringsAsFactors = F)
-j <- length(ls.sample[,2])/2
-for (i in 1:j) {
-  a <- "#$ -S /bin/bash"
-  b <- "#$ -j y"
-  c <- "#$ -V"
-  d <- "#$ -cwd"
-  e <- "#$ -l h_vmem=100G"
-  f <- "#$ -q all.q"
-  l <- paste("hisat2 -x /datalus/fujj/fangting/20180828_callus/20181119_m6A/RefGenome/Zea_mays.B73_RefGen_v4.41_tran --rna-strandness RF -1 /datalus/fujj/fangting/20180828_callus/20181119_m6A/Cleandata/",ls.sample[i*2-1,1]," ","-2 /datalus/fujj/fangting/20180828_callus/20181119_m6A/Cleandata/",ls.sample[i*2,1]," ","-S"," ",ls.sample[i*2,2],".sam"," ","--summary-file"," ",ls.sample[i*2,2],".txt",sep = "")
-ls <- c(a,b,c,d,e,f,l)
-write.table(ls,file=paste("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2_RF/hisat2/run",i,".csh",sep=""),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
-}
-
-## submit code
-for i in *.csh
-  do
-   qsub $i
-done
-
-# hisat2比对后的SAM文件中"NH:i:1"标点用于筛选unique reads，MAPQ往往没有绝对的标准去筛选reads。
+#$ -S /bin/bash
+#$ -j y
+#$ -V
+#$ -cwd
+#$ -l h_vmem=100G
+hisat2 -x Zea_mays.B73_RefGen_v4.41_tran --rna-strandness RF -1 path/to/cleandata/D2_1_input_CleanData_R1.fastq.gz -2 path/to/cleandata/cleandata/D2_1_input_CleanData_R2.fastq.gz -S path/to/sam/D2_1_input.sam --summary-file D2_1_input.txt
 ```
 
 ## samtools converts SAM into BAM and filtered
 
 ```{r,eval=FALSE}
-mkdir samtools_filter
-
-ls.sample <- read.table("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2/sample.txt",sep = "",header = F,stringsAsFactors = F)
-j <- length(ls.sample[,2])/2
-for (i in 1:j) {
-  a <- "#$ -S /bin/bash"
-  b <- "#$ -j y"
-  c <- "#$ -V"
-  d <- "#$ -cwd"
-  e <- "#$ -l h_vmem=100G"
-  f <- "#$ -q all.q"
-  l <- paste("samtools view -bS ../hisat2/",ls.sample[i*2,2],".sam | samtools view -h -q 50"," ","->"," ",ls.sample[i*2,2],"/",ls.sample[i*2,2],".filter.bam",sep = "")
-ls <- c(a,b,c,d,e,f,l)
-write.table(ls,file=paste("/datalus/fujj/fangting/20180828_callus/20181119_m6A/analysis/HISAT2_RF/samtools_filter/run",i,".filter.csh",sep=""),sep="\t",quote=FALSE,row.names=FALSE,col.names=FALSE)
-}
-
-## submit code
-for i in *.filter.csh
-  do
-   qsub $i
-done
+#$ -S /bin/bash
+#$ -j y
+#$ -V
+#$ -cwd
+#$ -l h_vmem=100G
+samtools view -bS path/to/sam/D2_1_input.sam | samtools view -h -q 50 | grep 'NH:i:1' -> path/to/filtered_bam/D2_1_input.filtered.bam
 ```
 
