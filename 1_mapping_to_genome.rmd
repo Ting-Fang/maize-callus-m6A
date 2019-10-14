@@ -40,6 +40,6 @@ hisat2 -x Zea_mays.B73_RefGen_v4.41_tran --rna-strandness RF -1 path/to/cleandat
 #$ -V
 #$ -cwd
 #$ -l h_vmem=100G
-samtools view -bS path/to/sam/D2_1_input.sam | samtools view -h -q 50 | grep 'NH:i:1' -> path/to/filtered_bam/D2_1_input.filtered.bam
+samtools view -bS path/to/sam/D2_1_input.sam | samtools view -h -q 50 -> path/to/filtered_bam/D2_1_input.filtered.bam
 ```
 
